@@ -1,0 +1,36 @@
+{
+    "schemaVersion": 1,
+    "id": "skintypefix",
+    "version": "${version}",
+    "name": "Skin Type Fix",
+    "description": "Fix wrong skin type for some players.",
+    "authors": [
+        "Puqns67"
+    ],
+    "contact": {
+        "homepage": "https://modrinth.com/project/skintypefix",
+        "sources": "https://github.com/Puqns67/SkinTypeFix"
+    },
+    "license": "GPL-3.0-or-later",
+    "icon": "assets/skintypefix/icon.png",
+    "environment": "client",
+    "entrypoints": {
+        "client": [
+            "icu.puqns67.skintypefix.SkinTypeFix"
+        ]
+    },
+    "mixins": [
+        {
+            "config": "skintypefix.mixins.json",
+            "environment": "client"
+        }
+    ],
+    "depends": {
+        "fabricloader": ">=0.15.11",
+        "minecraft": "~1.20.6",
+        "java": ">=21"
+    },
+    "suggests": {
+        "another-mod": "*"
+    }
+}

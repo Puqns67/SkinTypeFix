@@ -1,0 +1,5 @@
+{
+    "modmenu.nameTranslation.skintypefix": "Skin type fix",
+    "modmenu.summaryTranslation.skintypefix": "Fix wrong skin type for some players.",
+    "modmenu.descriptionTranslation.skintypefix": "Fix an issue where the skin type of some players did not match the skin type of the actual skin file."
+}
