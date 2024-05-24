@@ -1,36 +1,36 @@
 {
-    "schemaVersion": 1,
-    "id": "skintypefix",
-    "version": "${version}",
-    "name": "Skin Type Fix",
-    "description": "Fix wrong skin type for some players.",
-    "authors": [
-        "Puqns67"
-    ],
-    "contact": {
-        "homepage": "https://modrinth.com/project/skintypefix",
-        "sources": "https://github.com/Puqns67/SkinTypeFix"
-    },
-    "license": "GPL-3.0-or-later",
-    "icon": "assets/skintypefix/icon.png",
-    "environment": "client",
-    "entrypoints": {
-        "client": [
-            "icu.puqns67.skintypefix.SkinTypeFix"
-        ]
-    },
-    "mixins": [
-        {
-            "config": "skintypefix.mixins.json",
-            "environment": "client"
-        }
-    ],
-    "depends": {
-        "fabricloader": ">=0.15.11",
-        "minecraft": "~1.20.6",
-        "java": ">=21"
-    },
-    "suggests": {
-        "another-mod": "*"
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "name": "${mod_name}",
+  "version": "${mod_version}",
+  "description": "${mod_description}",
+  "authors": [
+    "Puqns67"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/project/skintypefix",
+    "sources": "https://github.com/Puqns67/SkinTypeFix"
+  },
+  "license": "${mod_license}",
+  "icon": "assets/skintypefix/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "icu.puqns67.skintypefix.SkinTypeFix"
+    ]
+  },
+  "mixins": [
+    {
+      "config": "skintypefix.mixins.json",
+      "environment": "client"
     }
+  ],
+  "depends": {
+    "java": ">=${java_version}",
+    "minecraft": "~${minecraft_version}",
+    "fabricloader": ">=${fabric_version}"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
 }

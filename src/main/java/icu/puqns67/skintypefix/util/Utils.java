@@ -1,18 +1,16 @@
 package icu.puqns67.skintypefix.util;
 
-import net.minecraft.client.util.SkinTextures;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.client.resources.PlayerSkin;
 
 import java.util.UUID;
-
 
 public class Utils {
 	private static final UUID INVALID_UUID = new UUID(0, 0);
 
-	public static @NotNull SkinTextures.Model reverseModelType(SkinTextures.Model type) {
+	public static PlayerSkin.Model reverseModelType(PlayerSkin.Model type) {
 		return switch (type) {
-			case SLIM -> SkinTextures.Model.WIDE;
-			case WIDE -> SkinTextures.Model.SLIM;
+			case SLIM -> PlayerSkin.Model.WIDE;
+			case WIDE -> PlayerSkin.Model.SLIM;
 		};
 	}
 

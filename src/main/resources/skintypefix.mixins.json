@@ -1,12 +1,12 @@
 {
-  "required": true,
-  "package": "icu.puqns67.skintypefix.mixin",
-  "compatibilityLevel": "JAVA_21",
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "client": [
-    "PlayerSkinProviderMixin",
-    "PlayerSkinTextureMixin"
-  ]
+	"package": "icu.puqns67.skintypefix.mixin.patch",
+	"client": [
+		"HttpTextureMixin",
+		"SkinManagerMixin"
+	],
+	"compatibilityLevel": "JAVA_21",
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"required": true
 }

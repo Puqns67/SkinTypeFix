@@ -1,9 +1,8 @@
 package icu.puqns67.skintypefix.util.image;
 
-import net.minecraft.client.texture.NativeImage;
+import com.mojang.blaze3d.platform.NativeImage;
 
 import java.util.ArrayList;
-
 
 public record Square(Point p1, Point p2) {
 	public Square {

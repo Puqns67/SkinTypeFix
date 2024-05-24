@@ -1,7 +1,6 @@
 package icu.puqns67.skintypefix.util.image;
 
-import net.minecraft.client.texture.NativeImage;
-
+import com.mojang.blaze3d.platform.NativeImage;
 
 public record Point(int x, int y) {
 	public Point {
@@ -11,6 +10,6 @@ public record Point(int x, int y) {
 	}
 
 	public boolean isBlack(NativeImage image) {
-		return image.getColor(x, y) == 0xff000000;
+		return image.getPixelRGBA(x, y) == 0xff000000;
 	}
 }

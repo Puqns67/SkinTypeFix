@@ -8,14 +8,13 @@ import net.fabricmc.api.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 @Environment(EnvType.CLIENT)
 public class SkinTypeFix implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("SkinTypeFix");
-	public static final Config CONFIG = ConfigLoader.load();
+	public static final Config CONFIG = ConfigLoader.get();
 
 	@Override
 	public void onInitializeClient() {
-		LOGGER.info("Loaded!");
+		LOGGER.info("[SkinTypeFix] Loaded!");
 	}
 }

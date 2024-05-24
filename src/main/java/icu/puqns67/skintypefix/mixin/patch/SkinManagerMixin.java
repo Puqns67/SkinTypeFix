@@ -1,19 +1,19 @@
-package icu.puqns67.skintypefix.mixin;
+package icu.puqns67.skintypefix.mixin.patch;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.authlib.SignatureState;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTextures;
 import icu.puqns67.skintypefix.SkinTypeFix;
-import icu.puqns67.skintypefix.accessor.PlayerSkinTextureAccessor;
+import icu.puqns67.skintypefix.mixin.accessor.HttpTextureAccessor;
 import icu.puqns67.skintypefix.util.Utils;
 import icu.puqns67.skintypefix.util.image.Places;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.PlayerSkinProvider;
-import net.minecraft.client.util.SkinTextures;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.client.resources.SkinManager;
+import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,20 +22,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-
 @Environment(EnvType.CLIENT)
-@Mixin(PlayerSkinProvider.class)
-public class PlayerSkinProviderMixin {
-	@Inject(method = "fetchSkinTextures(Ljava/util/UUID;Lcom/mojang/authlib/minecraft/MinecraftProfileTextures;)Ljava/util/concurrent/CompletableFuture;", at = @At("TAIL"), cancellable = true)
-	private void onFetchSkinTexturesPrivate(
+@Mixin(SkinManager.class)
+public class SkinManagerMixin {
+	@Inject(method = "registerTextures", at = @At("TAIL"), cancellable = true)
+	private void onRegisterTextures(
 		UUID uuid,
 		MinecraftProfileTextures textures,
-		CallbackInfoReturnable<CompletableFuture<SkinTextures>> cir,
+		CallbackInfoReturnable<CompletableFuture<PlayerSkin>> cir,
 		@Local(ordinal = 0) MinecraftProfileTexture skinTextureOrigin,
-		@Local(ordinal = 0) CompletableFuture<Identifier> skinFuture,
-		@Local(ordinal = 1) CompletableFuture<Identifier> capeFuture,
-		@Local(ordinal = 2) CompletableFuture<Identifier> elytraFuture,
-		@Local SkinTextures.Model skinModelOrigin,
+		@Local(ordinal = 0) CompletableFuture<ResourceLocation> skinFuture,
+		@Local(ordinal = 1) CompletableFuture<ResourceLocation> capeFuture,
+		@Local(ordinal = 2) CompletableFuture<ResourceLocation> elytraFuture,
+		@Local PlayerSkin.Model skinModelOrigin,
 		@Local String skinUrl
 	) {
 		// Skip fix if using internal skin or uuid is invalid uuid
@@ -45,15 +44,15 @@ public class PlayerSkinProviderMixin {
 
 		// If model is defaults to SLIM, and config `skipFixForSlimPlayers` is set to true,
 		// checks are skipped because some skins have bad pixels
-		if (skinModelOrigin == SkinTextures.Model.SLIM && SkinTypeFix.CONFIG.skipFixForSlimPlayers) {
+		if (skinModelOrigin == PlayerSkin.Model.SLIM && SkinTypeFix.CONFIG.skipFixForSlimPlayers) {
 			return;
 		}
 
-		var textureManager = MinecraftClient.getInstance().getTextureManager();
+		var textureManager = Minecraft.getInstance().getTextureManager();
 
-		CompletableFuture<SkinTextures.Model> modelFuture = skinFuture.thenApply(v -> {
+		CompletableFuture<PlayerSkin.Model> modelFuture = skinFuture.thenApply(v -> {
 			// Get texture from TextureManager
-			var skinTexture = (PlayerSkinTextureAccessor) textureManager.getTexture(skinFuture.join());
+			var skinTexture = (HttpTextureAccessor) textureManager.getTexture(skinFuture.join());
 
 			// Wait skin loading if it needed fetch from web
 			skinTexture.skinTypeFix$joinLoader();
@@ -84,7 +83,7 @@ public class PlayerSkinProviderMixin {
 		cir.setReturnValue(
 			CompletableFuture
 				.allOf(skinFuture, capeFuture, elytraFuture, modelFuture)
-				.thenApply(v -> new SkinTextures(
+				.thenApply(v -> new PlayerSkin(
 					skinFuture.join(),
 					skinUrl,
 					capeFuture.join(),
