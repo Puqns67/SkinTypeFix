@@ -11,6 +11,7 @@ In this repository the code is split into branches, You can quickly jump to each
 在此仓库中，代码被拆分至了各个分支，你可通过下方的链接列表快速跳转至各分支。
 
 * [fabric](https://github.com/Puqns67/SkinTypeFix/tree/fabric)
+* [neoforge](https://github.com/Puqns67/SkinTypeFix/tree/neoforge)
 
 ## license
 
