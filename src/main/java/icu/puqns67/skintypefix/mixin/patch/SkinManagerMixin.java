@@ -44,7 +44,7 @@ public class SkinManagerMixin {
 
 		// If model is defaults to SLIM, and config `skipFixForSlimPlayers` is set to true,
 		// checks are skipped because some skins have bad pixels
-		if (skinModelOrigin == PlayerSkin.Model.SLIM && SkinTypeFix.CONFIG.skipFixForSlimPlayers) {
+		if (SkinTypeFix.CONFIG.skipFixForSlimPlayers && skinModelOrigin == PlayerSkin.Model.SLIM) {
 			return;
 		}
 

@@ -1,7 +1,12 @@
 plugins {
 	id("java")
-	id("fabric-loom") version "1.6-SNAPSHOT"
+	id("fabric-loom") version "1.6.11"
 	id("idea")
+}
+
+base {
+	archivesName = "${properties["mod_id"]}-fabric"
+	version = "${properties["mod_version"]}+mc${properties["minecraft_version"]}"
 }
 
 java {
@@ -16,16 +21,15 @@ dependencies {
 	modImplementation("net.fabricmc:fabric-loader:${properties["fabric_version"]}")
 }
 
-base {
-	archivesName = "${properties["mod_id"]}-fabric"
-	version = "v${properties["mod_version"]}+mc${properties["minecraft_version"]}"
-}
-
 tasks {
 	processResources {
 		filesMatching("fabric.mod.json") {
 			expand(project.properties)
 		}
+	}
+
+	compileJava {
+		options.encoding = "UTF-8"
 	}
 
 	jar {
