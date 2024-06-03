@@ -5,6 +5,7 @@ var minecraftVersion: String = property("minecraft_version").toString()
 var loaderVersion: String = property("${loaderName}_version").toString()
 
 var modId: String = property("mod_id").toString()
+var modName: String = property("mod_name").toString()
 var modVersion: String = property("mod_version").toString()
 
 fun getVersionType(version: String): String {
@@ -42,7 +43,7 @@ java {
 modrinth {
 	token = System.getenv("MODRINTH_TOKEN") ?: properties["modrinth_token"]?.toString()
 	projectId = modId
-	versionName = "${loaderName}@${version}"
+	versionName = "[${loaderName.uppercase()}][${minecraftVersion}] $modName $modVersion"
 	versionType = getVersionType(modVersion)
 	versionNumber = modVersion
 	uploadFile = tasks.remapJar as Any
