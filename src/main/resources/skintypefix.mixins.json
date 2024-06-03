@@ -4,7 +4,7 @@
 		"HttpTextureMixin",
 		"SkinManagerMixin"
 	],
-	"compatibilityLevel": "JAVA_21",
+	"compatibilityLevel": "JAVA_${java_version}",
 	"injectors": {
 		"defaultRequire": 1
 	},
