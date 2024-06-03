@@ -1,4 +1,4 @@
-# Skin type fix
+# SkinTypeFix
 
 Fix an issue where the skin type of some players did not match the skin type of the actual skin file.
 
