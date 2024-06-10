@@ -4,28 +4,45 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.authlib.SignatureState;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTextures;
+import com.mojang.authlib.minecraft.MinecraftSessionService;
 import icu.puqns67.skintypefix.Config;
 import icu.puqns67.skintypefix.SkinTypeFix;
 import icu.puqns67.skintypefix.mixin.accessor.HttpTextureAccessor;
 import icu.puqns67.skintypefix.util.Utils;
 import icu.puqns67.skintypefix.util.image.Places;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.nio.file.Path;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 @OnlyIn(Dist.CLIENT)
 @Mixin(SkinManager.class)
 public class SkinManagerMixin {
+	@Mutable
+	@Final
+	@Unique
+	private TextureManager skinTypeFix$textureManager;
+
+	@Inject(method = "<init>", at = @At("TAIL"))
+	public void onInit(TextureManager textureManager, Path path, MinecraftSessionService minecraftSessionService, Executor executor, CallbackInfo ci) {
+		this.skinTypeFix$textureManager = textureManager;
+	}
+
 	@Inject(method = "registerTextures", at = @At("TAIL"), cancellable = true)
 	private void onRegisterTextures(
 		UUID uuid,
@@ -49,14 +66,12 @@ public class SkinManagerMixin {
 			return;
 		}
 
-		var textureManager = Minecraft.getInstance().getTextureManager();
-
 		CompletableFuture<PlayerSkin.Model> modelFuture = skinFuture.thenApply(v -> {
 			// Get texture from TextureManager
-			var skinTexture = (HttpTextureAccessor) textureManager.getTexture(skinFuture.join());
+			var skinTexture = (HttpTextureAccessor) skinTypeFix$textureManager.getTexture(skinFuture.join());
 
 			// Wait skin loading if it needed fetch from web
-			skinTexture.skinTypeFix$joinLoader();
+			skinTexture.skinTypeFix$joinFuture();
 
 			// Get image from PlayerSkinTexture
 			var skinImage = skinTexture.skinTypeFix$getImage();
