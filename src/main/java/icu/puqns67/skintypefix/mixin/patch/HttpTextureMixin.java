@@ -1,8 +1,6 @@
 package icu.puqns67.skintypefix.mixin.patch;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.platform.TextureUtil;
-import icu.puqns67.skintypefix.SkinTypeFix;
 import icu.puqns67.skintypefix.mixin.accessor.HttpTextureAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -10,6 +8,7 @@ import net.minecraft.client.renderer.texture.HttpTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.*;
 
 import java.io.InputStream;
@@ -18,6 +17,9 @@ import java.util.concurrent.CompletableFuture;
 @Environment(EnvType.CLIENT)
 @Mixin(HttpTexture.class)
 public abstract class HttpTextureMixin extends SimpleTexture implements HttpTextureAccessor {
+	@Shadow
+	@Final
+	private static Logger LOGGER;
 	@Unique
 	@Nullable
 	protected NativeImage image = null;
@@ -37,7 +39,7 @@ public abstract class HttpTextureMixin extends SimpleTexture implements HttpText
 	protected abstract NativeImage processLegacySkin(NativeImage image);
 
 	@Unique
-	public void skinTypeFix$joinLoader() {
+	public void skinTypeFix$joinFuture() {
 		if (this.future != null) {
 			this.future.join();
 		}
@@ -56,18 +58,19 @@ public abstract class HttpTextureMixin extends SimpleTexture implements HttpText
 	@Overwrite
 	private NativeImage load(InputStream stream) {
 		try {
-			var buffer = TextureUtil.readResource(stream);
-			buffer.rewind();
-			this.image = NativeImage.read(buffer);
-			buffer.rewind();
-			var result = NativeImage.read(buffer);
+			var result = NativeImage.read(stream);
 			if (this.processLegacySkin) {
-				this.image = this.processLegacySkin(this.image);
 				result = this.processLegacySkin(result);
+
+				// If this.processLegacySkin is true, the image is the player's skin, so a backup needs to be created for check
+				if (result != null) {
+					this.image = new NativeImage(64, 64, true);
+					this.image.copyFrom(result);
+				}
 			}
 			return result;
-		} catch (Exception exception) {
-			SkinTypeFix.LOGGER.warn("Error while loading the skin texture", exception);
+		} catch (Exception e) {
+			LOGGER.warn("Error while loading the skin texture", e);
 		}
 		return null;
 	}
