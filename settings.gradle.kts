@@ -1,11 +1,11 @@
 pluginManagement {
 	repositories {
 		mavenLocal()
-		gradlePluginPortal()
 		maven {
 			name = "Neoforged"
 			url = uri("https://maven.neoforged.net/releases")
 		}
+		gradlePluginPortal()
 		mavenCentral()
 	}
 }
