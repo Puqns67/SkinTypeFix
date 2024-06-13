@@ -8,7 +8,7 @@ modId="${mod_id}"
 displayName="${mod_name}"
 version="${mod_version}"
 displayURL="https://modrinth.com/mod/skintypefix"
-logoFile="logo.png"
+logoFile="assets/${mod_id}/logo.png"
 authors="${mod_authors}"
 description='''${mod_description}'''
 
@@ -19,12 +19,10 @@ config="${mod_id}.mixins.json"
 	modId="minecraft"
 	type="required"
 	versionRange="${minecraft_version_range}"
-	ordering="NONE"
 	side="CLIENT"
 
 [[dependencies.${mod_id}]]
     modId="neoforge"
     type="required"
 	versionRange="${neoforge_version_range}"
-    ordering="NONE"
     side="CLIENT"
