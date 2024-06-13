@@ -21,7 +21,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
 
 plugins {
 	id("java")
-	id("net.neoforged.gradle.userdev") version "7.0.138"
+	id("net.neoforged.gradle.userdev") version "7.0.142"
 	id("com.modrinth.minotaur") version "2.+"
 	id("idea")
 }
