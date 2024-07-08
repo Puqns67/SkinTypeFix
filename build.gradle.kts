@@ -21,8 +21,8 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
 
 plugins {
 	id("java")
-	id("net.neoforged.gradle.userdev") version "7.0.142"
-	id("com.modrinth.minotaur") version "2.+"
+	id("net.neoforged.gradle.userdev") version "7.0.153"
+	id("com.modrinth.minotaur") version "2.8.7"
 	id("idea")
 }
 
@@ -36,9 +36,15 @@ dependencies {
 }
 
 java {
-	withSourcesJar()
 	sourceCompatibility = JavaVersion.valueOf("VERSION_${javaVersion}")
 	targetCompatibility = JavaVersion.valueOf("VERSION_${javaVersion}")
+}
+
+subsystems {
+	parchment {
+		minecraftVersion = property("minecraft_version").toString()
+		mappingsVersion = "2024.07.07"
+	}
 }
 
 modrinth {
