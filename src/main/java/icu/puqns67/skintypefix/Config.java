@@ -8,7 +8,7 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 @OnlyIn(Dist.CLIENT)
-@EventBusSubscriber(modid = SkinTypeFix.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = SkinTypeFix.ID, bus = EventBusSubscriber.Bus.MOD)
 public class Config {
 	private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
