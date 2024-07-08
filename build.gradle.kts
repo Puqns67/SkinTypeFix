@@ -18,8 +18,8 @@ fun getVersionType(version: String): String {
 
 plugins {
 	id("java")
-	id("fabric-loom") version "1.6.11"
-	id("com.modrinth.minotaur") version "2.+"
+	id("fabric-loom") version "1.7.2"
+	id("com.modrinth.minotaur") version "2.8.7"
 	id("idea")
 }
 
@@ -35,7 +35,6 @@ dependencies {
 }
 
 java {
-	withSourcesJar()
 	sourceCompatibility = JavaVersion.valueOf("VERSION_${javaVersion}")
 	targetCompatibility = JavaVersion.valueOf("VERSION_${javaVersion}")
 }
@@ -47,7 +46,6 @@ modrinth {
 	versionType = getVersionType(modVersion)
 	versionNumber = modVersion
 	uploadFile = tasks.remapJar as Any
-	additionalFiles = listOf(tasks.remapSourcesJar)
 }
 
 idea {
