@@ -1,4 +1,4 @@
-package icu.puqns67.skintypefix.mixin.accessor;
+package icu.puqns67.skintypefix.accessor;
 
 import com.mojang.blaze3d.platform.NativeImage;
 

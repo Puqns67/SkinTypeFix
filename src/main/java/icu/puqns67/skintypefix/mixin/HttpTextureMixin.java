@@ -1,7 +1,7 @@
-package icu.puqns67.skintypefix.mixin.patch;
+package icu.puqns67.skintypefix.mixin;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import icu.puqns67.skintypefix.mixin.accessor.HttpTextureAccessor;
+import icu.puqns67.skintypefix.accessor.HttpTextureAccessor;
 import net.minecraft.client.renderer.texture.HttpTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -46,6 +46,7 @@ public abstract class HttpTextureMixin extends SimpleTexture implements HttpText
 	}
 
 	@Unique
+	@Nullable
 	public NativeImage skinTypeFix$getImage() {
 		return this.skinTypeFix$image;
 	}
@@ -54,19 +55,17 @@ public abstract class HttpTextureMixin extends SimpleTexture implements HttpText
 	 * @author Puqns67
 	 * @reason Overwrite the load() function to create another NativeImage at loading, using for check skin.
 	 */
-	@Nullable
 	@Overwrite
+	@Nullable
 	private NativeImage load(InputStream stream) {
 		try {
 			var result = NativeImage.read(stream);
 			if (this.processLegacySkin) {
-				result = this.processLegacySkin(result);
-
 				// If this.processLegacySkin is true, the image is the player's skin, so a backup needs to be created for check
-				if (result != null) {
-					this.skinTypeFix$image = new NativeImage(64, 64, true);
-					this.skinTypeFix$image.copyFrom(result);
-				}
+				this.skinTypeFix$image = new NativeImage(64, 64, true);
+				this.skinTypeFix$image.copyFrom(result);
+
+				result = this.processLegacySkin(result);
 			}
 			return result;
 		} catch (Exception e) {

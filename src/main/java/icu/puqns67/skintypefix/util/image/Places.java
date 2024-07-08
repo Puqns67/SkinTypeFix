@@ -5,13 +5,13 @@ import com.mojang.blaze3d.platform.NativeImage;
 import java.util.ArrayList;
 
 public class Places {
-	public static final Places PLAYER = Places.forPlayer();
+	public static final Places DIFF_PLAYER_SKIN = Places.diffPlayerSkin();
 	private final ArrayList<Square> squares = new ArrayList<>();
 
 	public Places() {
 	}
 
-	public static Places forPlayer() {
+	public static Places diffPlayerSkin() {
 		var result = new Places();
 		result.add(50, 16, 51, 19);
 		result.add(50, 16, 51, 19);
@@ -29,9 +29,9 @@ public class Places {
 		this.add(new Square(x1, y1, x2, y2));
 	}
 
-	public boolean isAllBlack(NativeImage image) {
+	public boolean hasTransparent(NativeImage image) {
 		for (var square : this.squares) {
-			if (!square.isAllBlack(image)) {
+			if (!square.hasTransparent(image)) {
 				return false;
 			}
 		}
