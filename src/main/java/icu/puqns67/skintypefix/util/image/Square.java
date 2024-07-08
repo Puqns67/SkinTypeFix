@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public record Square(Point p1, Point p2) {
 	public Square {
-		// The point close to (0,0) is p1
-		if (p2.x() < p1.x() || p1.x() == p2.x() && p2.y() < p1.y()) {
+		// The point close to (0, 0) is p1, if the order is not correct then reverse them
+		if (p2.x() < p1.x() || (p2.x() == p1.x() && p2.y() < p1.y())) {
 			var tmp = p1;
 			p1 = p2;
 			p2 = tmp;
@@ -28,9 +28,9 @@ public record Square(Point p1, Point p2) {
 		return result;
 	}
 
-	public boolean isAllBlack(NativeImage image) {
+	public boolean hasTransparent(NativeImage image) {
 		for (var point : this.points()) {
-			if (!point.isBlack(image)) {
+			if (!point.isTransparent(image)) {
 				return false;
 			}
 		}

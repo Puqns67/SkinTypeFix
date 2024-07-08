@@ -1,4 +1,4 @@
-package icu.puqns67.skintypefix.mixin.patch;
+package icu.puqns67.skintypefix.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.authlib.SignatureState;
@@ -6,7 +6,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTextures;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import icu.puqns67.skintypefix.SkinTypeFix;
-import icu.puqns67.skintypefix.mixin.accessor.HttpTextureAccessor;
+import icu.puqns67.skintypefix.accessor.HttpTextureAccessor;
 import icu.puqns67.skintypefix.util.Utils;
 import icu.puqns67.skintypefix.util.image.Places;
 import net.fabricmc.api.EnvType;
@@ -75,14 +75,14 @@ public class SkinManagerMixin {
 			// Get image from PlayerSkinTexture
 			var skinImage = skinTexture.skinTypeFix$getImage();
 			if (skinImage == null) {
-				SkinTypeFix.LOGGER.warn("[SkinTypeFix] [{}] {GET_IMAGE} An error occurred while getting image!", uuid);
+				SkinTypeFix.LOGGER.warn("[SkinTypeFix] [{}] Unable to get image!", uuid);
 				return skinModelOrigin;
 			}
 
 			// Check skin type
 			var needFix = switch (skinModelOrigin) {
-				case SLIM -> !Places.PLAYER.isAllBlack(skinImage);
-				case WIDE -> Places.PLAYER.isAllBlack(skinImage);
+				case SLIM -> !Places.DIFF_PLAYER_SKIN.hasTransparent(skinImage);
+				case WIDE -> Places.DIFF_PLAYER_SKIN.hasTransparent(skinImage);
 			};
 
 			if (needFix) {

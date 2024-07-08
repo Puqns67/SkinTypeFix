@@ -1,5 +1,5 @@
 {
-	"package": "icu.puqns67.skintypefix.mixin.patch",
+	"package": "icu.puqns67.skintypefix.mixin",
 	"client": [
 		"HttpTextureMixin",
 		"SkinManagerMixin"

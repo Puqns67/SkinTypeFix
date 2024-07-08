@@ -9,7 +9,7 @@ public record Point(int x, int y) {
 		}
 	}
 
-	public boolean isBlack(NativeImage image) {
-		return image.getPixelRGBA(x, y) == 0xff000000;
+	public boolean isTransparent(NativeImage image) {
+		return image.getPixelRGBA(x, y) >>> 24 != 0xff;
 	}
 }
