@@ -16,12 +16,9 @@ fun getVersionType(version: String): String {
 	}
 }
 
-// Need to be set for neoforge
-java.toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
-
 plugins {
 	id("java")
-	id("net.neoforged.gradle.userdev") version "7.0.153"
+	id("net.neoforged.moddev") version "2.0.1-beta"
 	id("com.modrinth.minotaur") version "2.8.7"
 	id("idea")
 }
@@ -31,19 +28,29 @@ base {
 	version = "${modVersion}+mc${minecraftVersion}"
 }
 
-dependencies {
-	implementation("net.neoforged:neoforge:${loaderVersion}")
-}
-
 java {
 	sourceCompatibility = JavaVersion.valueOf("VERSION_${javaVersion}")
 	targetCompatibility = JavaVersion.valueOf("VERSION_${javaVersion}")
 }
 
-subsystems {
+neoForge {
+	version = loaderVersion
+
+	mods {
+		register(modId) {
+			sourceSet(sourceSets["main"])
+		}
+	}
+
+	runs {
+		create("client") {
+			client()
+		}
+	}
+
 	parchment {
 		minecraftVersion = property("minecraft_version").toString()
-		mappingsVersion = "2024.07.07"
+		mappingsVersion = property("parchment_version").toString()
 	}
 }
 
