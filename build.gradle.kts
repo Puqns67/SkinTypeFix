@@ -3,6 +3,7 @@ var loaderName: String = "neoforge"
 var javaVersion: String = property("java_version").toString()
 var minecraftVersion: String = property("minecraft_version").toString()
 var loaderVersion: String = property("${loaderName}_version").toString()
+var parchmentVersion: String = property("parchment_version").toString()
 
 var modId: String = property("mod_id").toString()
 var modName: String = property("mod_name").toString()
@@ -45,12 +46,13 @@ neoForge {
 	runs {
 		create("client") {
 			client()
+			logLevel = org.slf4j.event.Level.DEBUG
 		}
 	}
 
 	parchment {
-		minecraftVersion = property("minecraft_version").toString()
-		mappingsVersion = property("parchment_version").toString()
+		minecraftVersion
+		mappingsVersion = parchmentVersion
 	}
 }
 
