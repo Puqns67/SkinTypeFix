@@ -66,6 +66,9 @@ modrinth {
 	// Minotaur cannot detect Minecraft version in Neoforge environment
 	// https://github.com/modrinth/minotaur/issues/59
 	gameVersions = listOf(minecraftVersion)
+	// Minotaur cannot detect loader when using ModDevGradle from Neoforge
+	// https://github.com/modrinth/minotaur/issues/67
+	loaders = listOf(loaderName)
 }
 
 idea {
