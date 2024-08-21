@@ -9,7 +9,6 @@ import icu.puqns67.skintypefix.Config;
 import icu.puqns67.skintypefix.SkinTypeFix;
 import icu.puqns67.skintypefix.accessor.HttpTextureAccessor;
 import icu.puqns67.skintypefix.util.Utils;
-import icu.puqns67.skintypefix.util.image.Places;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.client.resources.SkinManager;
@@ -68,31 +67,24 @@ public class SkinManagerMixin {
 
 		CompletableFuture<PlayerSkin.Model> modelFuture = skinFuture.thenApply(v -> {
 			// Get texture from TextureManager
-			var skinTexture = (HttpTextureAccessor) skinTypeFix$textureManager.getTexture(skinFuture.join());
+			var skinTexture = (HttpTextureAccessor) this.skinTypeFix$textureManager.getTexture(skinFuture.join());
 
 			// Wait skin loading if it needed fetch from web
 			skinTexture.skinTypeFix$joinFuture();
 
 			// Get image from PlayerSkinTexture
-			var skinImage = skinTexture.skinTypeFix$getImage();
-			if (skinImage == null) {
-				SkinTypeFix.LOGGER.warn("[{}] Unable to get image!", uuid);
+			var skinModelChecked = skinTexture.skinTypeFix$getType();
+
+			if (skinModelChecked == null) {
+				SkinTypeFix.LOGGER.warn("[{}] Unable to get skin type, using original skin type!", uuid);
 				return skinModelOrigin;
 			}
 
-			// Check skin type
-			var needFix = switch (skinModelOrigin) {
-				case SLIM -> !Places.DIFF_PLAYER_SKIN.hasTransparent(skinImage);
-				case WIDE -> Places.DIFF_PLAYER_SKIN.hasTransparent(skinImage);
-			};
-
-			if (needFix) {
-				var skinModelFixed = Utils.reverseModelType(skinModelOrigin);
-				SkinTypeFix.LOGGER.info("[{}] Fixed skin type: {} -> {}", uuid, skinModelOrigin, skinModelFixed);
-				return skinModelFixed;
+			if (skinModelOrigin != skinModelChecked) {
+				SkinTypeFix.LOGGER.info("[{}] Fixed skin type: {} -> {}", uuid, skinModelOrigin, skinModelChecked);
 			}
 
-			return skinModelOrigin;
+			return skinModelChecked;
 		});
 
 		// Return

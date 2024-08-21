@@ -14,7 +14,9 @@ import org.slf4j.LoggerFactory;
 @Mod(SkinTypeFix.ID)
 public class SkinTypeFix {
 	public static final String ID = "skintypefix";
-	public static final Logger LOGGER = LoggerFactory.getLogger(ID);
+	public static final String NAME = "SkinTypeFix";
+
+	public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
 
 	public SkinTypeFix(IEventBus modEventBus, ModContainer modContainer) {
 		modEventBus.addListener(this::setup);

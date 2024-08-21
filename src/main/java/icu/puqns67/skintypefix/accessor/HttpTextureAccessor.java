@@ -1,9 +1,12 @@
 package icu.puqns67.skintypefix.accessor;
 
-import com.mojang.blaze3d.platform.NativeImage;
+import net.minecraft.client.resources.PlayerSkin;
+
+import javax.annotation.Nullable;
 
 public interface HttpTextureAccessor {
 	void skinTypeFix$joinFuture();
 
-	NativeImage skinTypeFix$getImage();
+	@Nullable
+	PlayerSkin.Model skinTypeFix$getType();
 }
