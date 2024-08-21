@@ -6,6 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.texture.HttpTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -13,6 +14,8 @@ import org.spongepowered.asm.mixin.*;
 
 import java.io.InputStream;
 import java.util.concurrent.CompletableFuture;
+
+import static icu.puqns67.skintypefix.util.Utils.checkSkinModelType;
 
 @Environment(EnvType.CLIENT)
 @Mixin(HttpTexture.class)
@@ -29,6 +32,9 @@ public abstract class HttpTextureMixin extends SimpleTexture implements HttpText
 	@Shadow
 	@Final
 	private boolean processLegacySkin;
+	@Unique
+	@Nullable
+	private PlayerSkin.Model skinTypeFix$type = null;
 
 	public HttpTextureMixin(ResourceLocation location) {
 		super(location);
@@ -46,9 +52,24 @@ public abstract class HttpTextureMixin extends SimpleTexture implements HttpText
 	}
 
 	@Unique
+	private void setSkinTypeFix$closeImage() {
+		if (this.skinTypeFix$image != null) {
+			this.skinTypeFix$image.close();
+			this.skinTypeFix$image = null;
+		}
+	}
+
+	@Unique
 	@Nullable
-	public NativeImage skinTypeFix$getImage() {
-		return this.skinTypeFix$image;
+	public PlayerSkin.Model skinTypeFix$getType() {
+		if (this.skinTypeFix$type == null) {
+			if (this.skinTypeFix$image == null) {
+				return null;
+			}
+			this.skinTypeFix$type = checkSkinModelType(this.skinTypeFix$image);
+			this.setSkinTypeFix$closeImage();
+		}
+		return this.skinTypeFix$type;
 	}
 
 	/**
@@ -61,11 +82,16 @@ public abstract class HttpTextureMixin extends SimpleTexture implements HttpText
 		try {
 			var result = NativeImage.read(stream);
 			if (this.processLegacySkin) {
-				// If this.processLegacySkin is true, the image is the player's skin, so a backup needs to be created for check
-				this.skinTypeFix$image = new NativeImage(64, 64, true);
-				this.skinTypeFix$image.copyFrom(result);
-
 				result = this.processLegacySkin(result);
+
+				if (result != null) {
+					this.setSkinTypeFix$closeImage();
+
+					// If this.processLegacySkin is true, the image is the player's skin,
+					// so a backup needs to be created for check.
+					this.skinTypeFix$image = new NativeImage(64, 64, true);
+					this.skinTypeFix$image.copyFrom(result);
+				}
 			}
 			return result;
 		} catch (Exception e) {

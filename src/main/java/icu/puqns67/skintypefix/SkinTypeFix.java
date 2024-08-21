@@ -10,7 +10,10 @@ import org.slf4j.LoggerFactory;
 
 @Environment(EnvType.CLIENT)
 public class SkinTypeFix implements ClientModInitializer {
-	public static final Logger LOGGER = LoggerFactory.getLogger("SkinTypeFix");
+	public static final String ID = "skintypefix";
+	public static final String NAME = "SkinTypeFix";
+
+	public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
 	public static final Config CONFIG = ConfigLoader.get();
 
 	@Override

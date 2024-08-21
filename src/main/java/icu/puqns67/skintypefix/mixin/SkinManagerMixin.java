@@ -8,7 +8,6 @@ import com.mojang.authlib.minecraft.MinecraftSessionService;
 import icu.puqns67.skintypefix.SkinTypeFix;
 import icu.puqns67.skintypefix.accessor.HttpTextureAccessor;
 import icu.puqns67.skintypefix.util.Utils;
-import icu.puqns67.skintypefix.util.image.Places;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -35,11 +34,11 @@ public class SkinManagerMixin {
 	@Mutable
 	@Final
 	@Unique
-	private TextureManager textureManager;
+	private TextureManager skinTypeFix$textureManager;
 
 	@Inject(method = "<init>", at = @At("TAIL"))
 	public void onInit(TextureManager textureManager, Path path, MinecraftSessionService minecraftSessionService, Executor executor, CallbackInfo ci) {
-		this.textureManager = textureManager;
+		this.skinTypeFix$textureManager = textureManager;
 	}
 
 	@Inject(method = "registerTextures", at = @At("TAIL"), cancellable = true)
@@ -67,31 +66,24 @@ public class SkinManagerMixin {
 
 		CompletableFuture<PlayerSkin.Model> modelFuture = skinFuture.thenApply(v -> {
 			// Get texture from TextureManager
-			var skinTexture = (HttpTextureAccessor) textureManager.getTexture(skinFuture.join());
+			var skinTexture = (HttpTextureAccessor) this.skinTypeFix$textureManager.getTexture(skinFuture.join());
 
 			// Wait skin loading if it needed fetch from web
 			skinTexture.skinTypeFix$joinFuture();
 
 			// Get image from PlayerSkinTexture
-			var skinImage = skinTexture.skinTypeFix$getImage();
-			if (skinImage == null) {
-				SkinTypeFix.LOGGER.warn("[SkinTypeFix] [{}] Unable to get image!", uuid);
+			var skinModelChecked = skinTexture.skinTypeFix$getType();
+
+			if (skinModelChecked == null) {
+				SkinTypeFix.LOGGER.warn("[SkinTypeFix] [{}] Unable to get skin type, using original skin type!", uuid);
 				return skinModelOrigin;
 			}
 
-			// Check skin type
-			var needFix = switch (skinModelOrigin) {
-				case SLIM -> !Places.DIFF_PLAYER_SKIN.hasTransparent(skinImage);
-				case WIDE -> Places.DIFF_PLAYER_SKIN.hasTransparent(skinImage);
-			};
-
-			if (needFix) {
-				var skinModelFixed = Utils.reverseModelType(skinModelOrigin);
-				SkinTypeFix.LOGGER.info("[SkinTypeFix] [{}] Fixed skin type: {} -> {}", uuid, skinModelOrigin, skinModelFixed);
-				return skinModelFixed;
+			if (skinModelOrigin != skinModelChecked) {
+				SkinTypeFix.LOGGER.info("[SkinTypeFix] [{}] Fixed skin type: {} -> {}", uuid, skinModelOrigin, skinModelChecked);
 			}
 
-			return skinModelOrigin;
+			return skinModelChecked;
 		});
 
 		// Return

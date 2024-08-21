@@ -1,7 +1,5 @@
 package icu.puqns67.skintypefix.util.image;
 
-import com.mojang.blaze3d.platform.NativeImage;
-
 import java.util.ArrayList;
 
 public record Square(Point p1, Point p2) {
@@ -26,14 +24,5 @@ public record Square(Point p1, Point p2) {
 			}
 		}
 		return result;
-	}
-
-	public boolean hasTransparent(NativeImage image) {
-		for (var point : this.points()) {
-			if (!point.isTransparent(image)) {
-				return false;
-			}
-		}
-		return true;
 	}
 }
