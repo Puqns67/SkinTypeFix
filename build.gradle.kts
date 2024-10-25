@@ -36,6 +36,7 @@ java {
 
 neoForge {
 	version = loaderVersion
+	validateAccessTransformers = true
 
 	mods {
 		register(modId) {

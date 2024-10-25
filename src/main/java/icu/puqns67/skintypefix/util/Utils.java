@@ -28,9 +28,8 @@ public class Utils {
 		var timesForSlim = new HashMap<Integer, Integer>();
 		PlayerSkin.Model result = null;
 
-		// The result of NativeImage.getPixelRGBA() is ARGB, not RGBA, like 0xAARRGGBB
-		PLAYER_SKIN_DIFF_SLIM_TO_WILD.forEach(p -> timesForDiff.merge(image.getPixelRGBA(p.x(), p.y()), 1, Integer::sum));
-		PLAYER_SKIN_SLIM.forEach(p -> timesForSlim.merge(image.getPixelRGBA(p.x(), p.y()), 1, Integer::sum));
+		PLAYER_SKIN_DIFF_SLIM_TO_WILD.forEach(p -> timesForDiff.merge(image.getPixelABGR(p.x(), p.y()), 1, Integer::sum));
+		PLAYER_SKIN_SLIM.forEach(p -> timesForSlim.merge(image.getPixelABGR(p.x(), p.y()), 1, Integer::sum));
 
 		var blackTimesForDiff = timesForDiff.getOrDefault(0xff000000, 0);
 		var blackTimesForSlim = timesForSlim.getOrDefault(0xff000000, 0);

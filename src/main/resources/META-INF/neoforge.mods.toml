@@ -12,6 +12,9 @@ logoFile="assets/${mod_id}/logo.png"
 authors="${mod_authors}"
 description='''${mod_description}'''
 
+[[accessTransformers]]
+file="META-INF/accesstransformer.cfg"
+
 [[mixins]]
 config="${mod_id}.mixins.json"
 
