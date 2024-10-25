@@ -19,7 +19,7 @@ fun getVersionType(version: String): String {
 
 plugins {
 	id("java")
-	id("net.neoforged.moddev") version "2.0.1-beta"
+	id("net.neoforged.moddev") version "2.0.42-beta"
 	id("com.modrinth.minotaur") version "2.8.7"
 	id("idea")
 }
@@ -50,10 +50,10 @@ neoForge {
 		}
 	}
 
-	parchment {
-		minecraftVersion
-		mappingsVersion = parchmentVersion
-	}
+//	parchment {
+//		minecraftVersion
+//		mappingsVersion = parchmentVersion
+//	}
 }
 
 modrinth {
