@@ -39,6 +39,10 @@ java {
 	targetCompatibility = JavaVersion.valueOf("VERSION_${javaVersion}")
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/${modId}.accesswidener")
+}
+
 modrinth {
 	token = System.getenv("MODRINTH_TOKEN") ?: properties["modrinth_token"]?.toString()
 	projectId = modId

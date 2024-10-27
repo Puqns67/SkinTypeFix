@@ -1,36 +1,37 @@
 {
-  "schemaVersion": 1,
-  "id": "${mod_id}",
-  "name": "${mod_name}",
-  "version": "${mod_version}",
-  "description": "${mod_description}",
-  "authors": [
-    "Puqns67"
-  ],
-  "contact": {
-    "homepage": "https://modrinth.com/project/skintypefix",
-    "sources": "https://github.com/Puqns67/SkinTypeFix"
-  },
-  "license": "${mod_license}",
-  "icon": "assets/skintypefix/icon.png",
-  "environment": "client",
-  "entrypoints": {
-    "client": [
-      "icu.puqns67.skintypefix.SkinTypeFix"
-    ]
-  },
-  "mixins": [
-    {
-      "config": "skintypefix.mixins.json",
-      "environment": "client"
-    }
-  ],
-  "depends": {
-    "java": ">=${java_version}",
-    "minecraft": "~${minecraft_version}",
-    "fabricloader": ">=${fabric_version}"
-  },
-  "suggests": {
-    "another-mod": "*"
-  }
+	"schemaVersion": 1,
+	"id": "${mod_id}",
+	"name": "${mod_name}",
+	"version": "${mod_version}",
+	"description": "${mod_description}",
+	"authors": [
+		"Puqns67"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/project/skintypefix",
+		"sources": "https://github.com/Puqns67/SkinTypeFix"
+	},
+	"license": "${mod_license}",
+	"icon": "assets/skintypefix/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"icu.puqns67.skintypefix.SkinTypeFix"
+		]
+	},
+	"accessWidener": "${mod_id}.accesswidener",
+	"mixins": [
+		{
+			"config": "skintypefix.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"java": ">=${java_version}",
+		"minecraft": "~${minecraft_version}",
+		"fabricloader": ">=${fabric_version}"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
 }
