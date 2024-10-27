@@ -18,7 +18,7 @@ fun getVersionType(version: String): String {
 
 plugins {
 	id("java")
-	id("fabric-loom") version "1.7.3"
+	id("fabric-loom") version "1.8.10"
 	id("com.modrinth.minotaur") version "2.8.7"
 	id("idea")
 }
